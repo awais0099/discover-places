@@ -14,12 +14,13 @@ export default function handler(req, res) {
         limit: limit,
       },
       headers: {
-        'X-RapidAPI-Key': '4d72f977a4msh84e019d97fe9773p1a1817jsn9aae2affa6ee',
+        'X-RapidAPI-Key': '041f896cbcmshb41bd4a54d8e653p1f8996jsnd3e101237724',
         'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com'
       }
     };
 
-    axios.request(options).then(function (response) {
+    axios.request(options)
+    .then(function (response) {
       const { data } = response.data;
       console.log("data", data);
       res.status(200).json({ message: "Success!", placesData: data });

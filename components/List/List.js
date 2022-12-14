@@ -5,9 +5,8 @@ function List(props) {
 	const {places, ratingValue} = props;
 	return (
 		<>
-			<ListItem />
 			{places 
-				? places.map((place) => <ListItem place={place} key={place.id} />)
+				? places.map((place) => (<ListItem place={place} />))
 				: <Typography variant="h5">loading...</Typography> 
 			}
 		</>
