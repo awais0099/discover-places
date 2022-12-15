@@ -3,8 +3,13 @@ import Image from 'next/image'
 
 import GoogleMapReact from 'google-map-react';
 
-import { Typography } from "@mui/material";
+import { Typography, Rating } from "@mui/material";
 import { Box } from '@mui/system';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button'
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,6 +19,9 @@ function Map(props) {
   const { places } = props;
   const [isCard, setIsCard] = useState(false);
   const [cardData, setCardData] = useState(null);
+
+  const temp_image_url = "https://images.unsplash.com/photo-1517713982677-4b66332f98de?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80";
+
 
   return(
       <GoogleMapReact
@@ -47,26 +55,34 @@ function Map(props) {
         }
 
         { isCard && (
-          <Box sx={{
+          <Card sx={{
+            maxWidth: 145,
             position: "absolute",
-            top: "-8rem",
-            left: "7rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: ".8rem",
-            flexDirection: "column"
-          }} backgroundColor="#fff">
-            <Typography>{cardData.name}</Typography>
-            <Image 
-              src={
-                "https://images.unsplash.com/photo-1517713982677-4b66332f98de?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"}
-              alt="Picture of the author"
-              width={'150'}
-              height={'100'}
+            top: -128,
+            left: 112,
+          }}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={
+                !cardData.photo
+                ? temp_image_url
+                : !cardData.photo.images ? temp_image_url : !cardData.photo.images.medium ? temp_image_url : cardData.photo.images.medium.url
+            }
             />
-            <CloseIcon sx={{position: "absolute", top: "0", right: ".1rem", cursor: "pointer"}} onClick={() => setIsCard(false)} />
-          </Box>  
+            <CardContent>
+              <Typography>{cardData.name}</Typography>
+              <Rating
+                name=''
+                value={Number(cardData.rating ? cardData.rating:0)}
+                precision={0.5}
+                readOnly
+              />
+            </CardContent>
+            <CardActions>
+              <Button size="small"  onClick={() => setIsCard(false)}>Close</Button>
+            </CardActions>
+          </Card> 
         )}
       </GoogleMapReact>
   );
