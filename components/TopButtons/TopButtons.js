@@ -17,6 +17,7 @@ function TopButtons(props) {
     };
     // for menu end
 
+
     return (
         <>
             <Box>
@@ -63,8 +64,10 @@ function TopButtons(props) {
                     }
                 }
             ]}
-                onClick={() => props.onRestaurantBtnClick}
-            >Restaurants</Button>
+                onClick={() => props.onRestaurantBtnClick()}
+            >
+                Restaurants
+            </Button>
             <Button variant="contained" sx={[
                 { margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211', width: "8.5rem" },
                 {
@@ -74,8 +77,10 @@ function TopButtons(props) {
                     }
                 }
             ]}
-                onClick={() => props.onAttractionBtnClick}
-            >Attractions</Button>
+                onClick={() => props.onAttractionBtnClick()}
+            >
+                Attractions
+            </Button>
             <Button variant="contained" sx={[
                 { margin: "0rem 1rem", backgroundColor: "#fff", color: '#111211', width: "8.5rem" },
                 {
@@ -85,8 +90,10 @@ function TopButtons(props) {
                     }
                 }
             ]}
-                onClick={() => props.onHotelBtnBtnClick}
-            >Hotels</Button>
+                onClick={() => props.onHotelBtnClick()}
+            >
+                Hotels
+            </Button>
         </>
     );
 }

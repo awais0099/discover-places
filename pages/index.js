@@ -40,6 +40,7 @@ function Home() {
   const [isLoadingPlaces, setIsLoadingPlaces] = useState(false);
 
   useEffect(() => {
+    console.log("set rating");
     if (places) {
       const filteredData = places.filter(place => {
         if (place.rating) {
@@ -48,7 +49,10 @@ function Home() {
           }
         }
       });
-      setPlaces(filteredData);
+
+      if (filteredData.length > 0) {
+        setPlaces(filteredData);
+      }
     }
   }, [ratingValue]);
 
@@ -74,29 +78,37 @@ function Home() {
 
   useEffect(() => {
     console.log({ bounds });
-    setIsLoadingPlaces(true);
-    axios.request({
-      method: 'GET',
-      url: '',
-      params: {
-        types: types,
-        bl_latitude: bounds?.sw.lat,
-        tr_latitude: bounds?.ne.lat,
-        bl_longitude: bounds?.sw.lng,
-        tr_longitude: bounds?.ne.lng,
-        limit: '8',
-      }
-    }).then((response) => {
-      return response.data;
-    }).then((data) => {
-      let { message, placesData } = data;
-      setPlaces(placesData);
-    }).catch((error) => {
-      console.log("**error: page index.js:sending request to places api **");
-      const { data } = error.response;
-      setErrorMessage(data.message);
-    })
+    
+    if (bounds) {
+      setIsLoadingPlaces(true);
+      axios.request({
+        method: 'GET',
+        url: '/api/places/',
+        params: {
+          types: types,
+          bl_latitude: bounds?.sw.lat,
+          tr_latitude: bounds?.ne.lat,
+          bl_longitude: bounds?.sw.lng,
+          tr_longitude: bounds?.ne.lng,
+          limit: '8',
+        }
+      }).then((response) => {
+        return response.data;
+      }).then((data) => {
+        let { message, placesData } = data;
+        setPlaces(placesData);
+        setIsLoadingPlaces(false);
+        setErrorMessage('');
+      }).catch((error) => {
+        console.log("**error: page index.js:sending request to places api **");
+        const { data } = error.response;
+        setErrorMessage(data.message);
+      })
+    }
+
   }, [types, coordinates, bounds]);
+
+  console.log({places});
 
   const handleRestaurantsBtnClick = useCallback(() => {
     console.log("restaurent button click");
@@ -109,8 +121,8 @@ function Home() {
   }, []);
 
   const handleHotelsBtnClick = useCallback(() => {
-    setTypes("hotels");
     console.log("hotels button click");
+    setTypes("hotels");
   }, []);
 
   const handleSelectRating = useCallback((newvalue) => {
@@ -125,6 +137,7 @@ function Home() {
     setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
   }
 
+
   return (
     <>
       <Grid container>
@@ -134,8 +147,11 @@ function Home() {
               { errorMessage && <Typography variant='body1'>{errorMessage}</Typography> }
             </Grid>
             <Grid item xs sm md sx={{ marginTop: "1rem" }}>
-              {/* {isLoadingPlaces && <Box>loading...</Box>} */}
-              <List places={places} ratingValue={ratingValue} />
+              {
+                isLoadingPlaces
+                ? <Box>loading...</Box>
+                :<List places={places} ratingValue={ratingValue} />
+              }
             </Grid>
           </Grid>
         </Grid>
@@ -149,7 +165,7 @@ function Home() {
               <TopButtons
                 onRestaurantBtnClick={handleRestaurantsBtnClick}
                 onAttractionBtnClick={handleAttractionsBtnClick}
-                onHotelBtnBtnClick={handleHotelsBtnClick}
+                onHotelBtnClick={handleHotelsBtnClick}
                 onSelectRating={handleSelectRating}
               />
             </Grid>
