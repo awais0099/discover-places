@@ -6,7 +6,7 @@ function List(props) {
 	return (
 		<>
 			{places 
-				? places.map((place) => (<ListItem place={place} />))
+				? places.map((place) => (<ListItem place={place} key={place.location_id} />))
 				: <Typography variant="h5">loading...</Typography> 
 			}
 		</>

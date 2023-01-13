@@ -28,6 +28,7 @@ import Map from "../components/Map/Map.js";
 
 function Home() {
   console.log("home");
+
   const [coordinates, setCoordinates] = useState({});
   const [isFindingLocation, setIsFindingLocation] = useState(false);
   const [bounds, setBounds] = useState(null);
@@ -63,6 +64,7 @@ function Home() {
   };
 
   const error = () => {
+    setCoordinates({ lat: 47.37253782184951, lng: 8.584455197124047 });
     console.log("geolocation error");
   };
 
@@ -79,7 +81,7 @@ function Home() {
   useEffect(() => {
     console.log({ bounds });
     
-    if (bounds) {
+    if (bounds !== null || bounds !== undefined || bounds !== '') {
       setIsLoadingPlaces(true);
       axios.request({
         method: 'GET',
@@ -156,9 +158,15 @@ function Home() {
           </Grid>
         </Grid>
         <Grid item xs={12} md={8} sx={{ position: "relative", height: "100vh" }}>
+
           {isFindingLocation
-            ? <Typography variant='h5' sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50,-50)" }}>loading...</Typography>
-            : <Map coordinates={coordinates} places={places} setCoordinatesState={setCoordinatesState} setBoundsState={setBoundsState} />
+            ? <Typography variant='h5' sx={{ position: "absolute", top: "17%", left: "50%"}}>loading...</Typography>
+            : <Map
+                coordinates={coordinates}
+                places={places}
+                setCoordinatesState={setCoordinatesState}
+                setBoundsState={setBoundsState}
+              />
           }
           <Grid container>
             <Grid container item direction="row" justifyContent="center" spacing={1} xs={12} sm={12} md={12} sx={{ position: "absolute", top: '1rem' }}>
